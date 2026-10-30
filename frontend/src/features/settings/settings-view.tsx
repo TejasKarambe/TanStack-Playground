@@ -3,7 +3,6 @@ import { SlidersHorizontal, Moon, Sun, Laptop, Save, RotateCcw } from 'lucide-re
 import { useTheme } from '@/components/theme-provider'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { toast } from 'sonner'
 
 export function SettingsView() {

@@ -1,21 +1,17 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Link } from '@tanstack/react-router'
-import { CheckCircle2, Circle, Clock, ArrowRight, Layers, Sparkles } from 'lucide-react'
+import { ArrowRight, Layers } from 'lucide-react'
 import {
   TANSTACK_LIBRARIES,
   TOTAL_LESSONS,
   COMPLETED_LESSONS,
 } from '@/content/libraries-data'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { SearchInput } from '@/components/ui/search-input'
 import { LibraryIcon } from '@/components/library-icon'
 
 export function ProgressView() {
-  const [filter, setFilter] = useState<'ALL' | 'COMPLETED' | 'IN_PROGRESS'>('ALL')
-  const [search, setSearch] = useState('')
-
   const overallPercent = Math.round((COMPLETED_LESSONS / TOTAL_LESSONS) * 100)
 
   return (

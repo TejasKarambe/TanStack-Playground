@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Link, useLocation } from '@tanstack/react-router'
 import {
   LayoutDashboard,
@@ -9,7 +9,6 @@ import {
   ChevronLeft,
   ChevronRight,
   BookMarked,
-  Sparkles,
 } from 'lucide-react'
 import { TANSTACK_LIBRARIES } from '@/content/libraries-data'
 import { LibraryIcon } from '@/components/library-icon'

@@ -8,11 +8,9 @@ import {
   Bookmark,
   ArrowRight,
   ArrowLeft,
-  Layers,
-  Sparkles,
 } from 'lucide-react'
 import { TANSTACK_LIBRARIES } from '@/content/libraries-data'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { LibraryIcon } from '@/components/library-icon'

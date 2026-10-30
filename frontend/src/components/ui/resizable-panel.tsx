@@ -4,7 +4,6 @@ import {
   Panel,
   Separator,
   type GroupProps,
-  type PanelProps,
   type SeparatorProps,
 } from 'react-resizable-panels'
 import { GripVertical } from 'lucide-react'
