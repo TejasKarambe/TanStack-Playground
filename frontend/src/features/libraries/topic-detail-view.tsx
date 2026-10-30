@@ -20,17 +20,27 @@ import { Badge } from '@/components/ui/badge'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable-panel'
 import { EmptyState } from '@/components/ui/empty-state'
 import { LessonWorkspace } from '@/components/playground/lesson-workspace'
+import { useAuth } from '@/context/auth-context'
+import { progressApi, bookmarkApi } from '@/services/api'
 import { toast } from 'sonner'
 
 export function TopicDetailView() {
   const { libraryId, topicId } = useParams({ from: '/library/$libraryId/$topicId' })
+  const { isAuthenticated } = useAuth()
 
   const library = TANSTACK_LIBRARIES.find((lib) => lib.id === libraryId)
   const topic = library?.topics.find((t) => t.id === topicId)
   const manifest = getLessonByLibraryAndTopic(libraryId, topicId)
 
-  const [isCompleted, setIsCompleted] = useState(topic?.isCompleted ?? false)
-  const [isBookmarked, setIsBookmarked] = useState(topic?.isBookmarked ?? false)
+  // Local state with optimistic support
+  const [isCompleted, setIsCompleted] = useState(() => {
+    const local = localStorage.getItem(`completed_${topicId}`)
+    return local !== null ? local === 'true' : (topic?.isCompleted ?? false)
+  })
+  const [isBookmarked, setIsBookmarked] = useState(() => {
+    const local = localStorage.getItem(`bookmarked_${topicId}`)
+    return local !== null ? local === 'true' : (topic?.isBookmarked ?? false)
+  })
   const [openFaq, setOpenFaq] = useState<Record<number, boolean>>({ 0: true })
   const [mobileTab, setMobileTab] = useState<'theory' | 'playground'>('playground')
 
@@ -47,20 +57,55 @@ export function TopicDetailView() {
     )
   }
 
-  const toggleComplete = () => {
-    setIsCompleted((prev) => {
-      const next = !prev
-      toast.success(next ? 'Marked lesson as completed!' : 'Marked lesson as in progress.')
-      return next
-    })
+  const toggleComplete = async () => {
+    const previous = isCompleted
+    const next = !previous
+
+    // 1. Optimistic Update
+    setIsCompleted(next)
+    localStorage.setItem(`completed_${topicId}`, String(next))
+
+    if (isAuthenticated) {
+      try {
+        await progressApi.markCompleted(topicId)
+        toast.success(next ? 'Progress saved: Topic marked completed!' : 'Progress updated.')
+      } catch {
+        // Rollback on failure
+        setIsCompleted(previous)
+        localStorage.setItem(`completed_${topicId}`, String(previous))
+        toast.error('Failed to sync progress with backend. Reverting.')
+      }
+    } else {
+      toast.success(next ? 'Marked as completed (Guest session)' : 'Marked as in progress (Guest session)')
+    }
   }
 
-  const toggleBookmark = () => {
-    setIsBookmarked((prev) => {
-      const next = !prev
-      toast.success(next ? 'Added to bookmarks' : 'Removed from bookmarks')
-      return next
-    })
+  const toggleBookmark = async () => {
+    const previous = isBookmarked
+    const next = !previous
+
+    // 1. Optimistic Update
+    setIsBookmarked(next)
+    localStorage.setItem(`bookmarked_${topicId}`, String(next))
+
+    if (isAuthenticated) {
+      try {
+        if (next) {
+          await bookmarkApi.addBookmark(topicId)
+          toast.success('Bookmark saved to your account!')
+        } else {
+          await bookmarkApi.removeBookmark(topicId)
+          toast.info('Bookmark removed.')
+        }
+      } catch {
+        // Rollback on failure
+        setIsBookmarked(previous)
+        localStorage.setItem(`bookmarked_${topicId}`, String(previous))
+        toast.error('Failed to sync bookmark with backend. Reverting.')
+      }
+    } else {
+      toast.success(next ? 'Bookmark added (Guest session)' : 'Bookmark removed')
+    }
   }
 
   const toggleFaq = (idx: number) => {

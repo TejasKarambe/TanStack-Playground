@@ -4,6 +4,7 @@ import { Sidebar } from './sidebar'
 import { Navbar } from './navbar'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { Toaster } from '@/components/ui/sonner'
+import { AuthModal } from '@/components/auth/auth-modal'
 
 export function MainLayout() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
@@ -38,6 +39,7 @@ export function MainLayout() {
       </div>
 
       <Toaster position="bottom-right" />
+      <AuthModal />
     </div>
   )
 }

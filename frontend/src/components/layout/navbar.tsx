@@ -9,10 +9,14 @@ import {
   User,
   SlidersHorizontal,
   Bookmark,
+  LogIn,
+  LogOut,
 } from 'lucide-react'
 import { GitHubIcon } from '@/components/github-icon'
 import { useTheme } from '@/components/theme-provider'
+import { useAuth } from '@/context/auth-context'
 import { IconButton } from '@/components/ui/icon-button'
+import { Button } from '@/components/ui/button'
 import { SearchInput } from '@/components/ui/search-input'
 import {
   Breadcrumb,
@@ -38,6 +42,7 @@ interface NavbarProps {
 
 export function Navbar({ onOpenMobileMenu }: NavbarProps) {
   const { theme, setTheme, resolvedTheme } = useTheme()
+  const { user, isAuthenticated, openAuthModal, logout } = useAuth()
   const location = useLocation()
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -184,35 +189,52 @@ export function Navbar({ onOpenMobileMenu }: NavbarProps) {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* User Account / Settings Dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button className="flex h-7 w-7 items-center justify-center rounded-full bg-secondary border border-border text-xs font-medium text-foreground hover:bg-accent transition-colors cursor-pointer">
-              <User className="h-3.5 w-3.5 text-muted-foreground" />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-48">
-            <DropdownMenuLabel>
-              <div className="flex flex-col space-y-0.5">
-                <span className="text-xs font-semibold text-foreground">Developer</span>
-                <span className="text-[11px] text-muted-foreground font-normal">demo@tanstack.dev</span>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link to="/progress" className="cursor-pointer">
-                <Bookmark className="mr-2 h-3.5 w-3.5" />
-                <span>My Progress</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link to="/settings" className="cursor-pointer">
-                <SlidersHorizontal className="mr-2 h-3.5 w-3.5" />
-                <span>Preferences</span>
-              </Link>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {/* User Account / Sign In */}
+        {isAuthenticated && user ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 border border-primary/20 text-xs font-semibold text-primary hover:bg-primary/20 transition-colors cursor-pointer">
+                {user.displayName ? user.displayName[0].toUpperCase() : <User className="h-3.5 w-3.5" />}
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-52">
+              <DropdownMenuLabel>
+                <div className="flex flex-col space-y-0.5">
+                  <span className="text-xs font-semibold text-foreground">{user.displayName || 'Developer'}</span>
+                  <span className="text-[11px] text-muted-foreground font-normal truncate">{user.email}</span>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link to="/progress" className="cursor-pointer">
+                  <Bookmark className="mr-2 h-3.5 w-3.5" />
+                  <span>My Progress</span>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/settings" className="cursor-pointer">
+                  <SlidersHorizontal className="mr-2 h-3.5 w-3.5" />
+                  <span>Preferences</span>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => logout()} className="text-rose-500 cursor-pointer">
+                <LogOut className="mr-2 h-3.5 w-3.5" />
+                <span>Sign Out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={openAuthModal}
+            className="h-7 text-xs px-2.5 gap-1.5 font-medium border-border hover:bg-accent"
+          >
+            <LogIn className="h-3 w-3" />
+            <span>Sign In</span>
+          </Button>
+        )}
       </div>
     </header>
   )
