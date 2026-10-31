@@ -48,7 +48,10 @@ export interface PreferenceResponse {
   previewLayout: string
 }
 
-const API_BASE = '/api'
+const RAW_API_BASE = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.trim() || ''
+const API_BASE = RAW_API_BASE
+  ? (RAW_API_BASE.endsWith('/api') ? RAW_API_BASE : `${RAW_API_BASE.replace(/\/+$/, '')}/api`)
+  : '/api'
 
 async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const token = localStorage.getItem('tanstack_auth_token')

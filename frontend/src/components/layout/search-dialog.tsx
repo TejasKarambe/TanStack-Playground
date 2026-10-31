@@ -112,16 +112,13 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
       return suggestions
     }
 
+    const words = q.split(/\s+/).filter(Boolean)
     const items: SearchResultItem[] = []
 
     // 1. Search Libraries
     TANSTACK_LIBRARIES.forEach((lib) => {
-      if (
-        lib.name?.toLowerCase().includes(q) ||
-        lib.shortName?.toLowerCase().includes(q) ||
-        lib.description?.toLowerCase().includes(q) ||
-        lib.package?.toLowerCase().includes(q)
-      ) {
+      const target = `${lib.name} ${lib.shortName} ${lib.description} ${lib.packageName} ${lib.id}`.toLowerCase()
+      if (words.every((w) => target.includes(w))) {
         items.push({
           id: `lib-${lib.id}`,
           type: 'library',
@@ -135,13 +132,10 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
 
     // 2. Search Lessons
     ALL_LESSONS.forEach((lesson) => {
-      const titleMatch = lesson.title?.toLowerCase().includes(q)
-      const descMatch = lesson.description?.toLowerCase().includes(q)
-      const topicMatch = lesson.topicId?.toLowerCase().includes(q)
-      const libMatch = lesson.libraryId?.toLowerCase().includes(q)
+      const lib = TANSTACK_LIBRARIES.find((l) => l.id === lesson.libraryId)
+      const target = `${lib?.name || ''} ${lib?.shortName || ''} ${lesson.title} ${lesson.description} ${lesson.topicId} ${lesson.libraryId} ${lesson.learningObjectives?.join(' ') || ''}`.toLowerCase()
 
-      if (titleMatch || descMatch || topicMatch || libMatch) {
-        const lib = TANSTACK_LIBRARIES.find((l) => l.id === lesson.libraryId)
+      if (words.every((w) => target.includes(w))) {
         items.push({
           id: `lesson-${lesson.id}`,
           type: 'lesson',
@@ -154,7 +148,8 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
 
       // 3. Search Important APIs
       lesson.importantApis?.forEach((api) => {
-        if (api.name?.toLowerCase().includes(q) || api.description?.toLowerCase().includes(q)) {
+        const apiTarget = `${api.name} ${api.signature} ${api.description} ${lesson.title} ${lib?.name || ''}`.toLowerCase()
+        if (words.every((w) => apiTarget.includes(w))) {
           items.push({
             id: `api-${lesson.id}-${api.name}`,
             type: 'api',

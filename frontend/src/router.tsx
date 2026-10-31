@@ -91,6 +91,44 @@ const settingsRoute = createRoute({
   component: SettingsView,
 })
 
+import { EmptyState } from '@/components/ui/empty-state'
+import { Button } from '@/components/ui/button'
+import { AlertCircle, Compass } from 'lucide-react'
+
+function RouterErrorComponent({ error, reset }: { error: any; reset: () => void }) {
+  return (
+    <div className="flex-1 flex items-center justify-center p-8">
+      <div className="max-w-md w-full rounded-xl border border-destructive/20 bg-destructive/5 p-6 text-center space-y-4">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10 text-destructive">
+          <AlertCircle className="h-6 w-6" />
+        </div>
+        <div className="space-y-1">
+          <h3 className="text-lg font-semibold text-foreground">Navigation Error</h3>
+          <p className="text-xs text-muted-foreground">{error?.message || 'Failed to render requested view'}</p>
+        </div>
+        <div className="flex justify-center gap-2">
+          <Button size="sm" onClick={reset}>Try Again</Button>
+          <Button size="sm" variant="outline" onClick={() => window.location.assign('/dashboard')}>Go to Dashboard</Button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function RouterNotFoundComponent() {
+  return (
+    <div className="flex-1 flex items-center justify-center p-8">
+      <EmptyState
+        icon={<Compass className="h-6 w-6 text-primary" />}
+        title="Page Not Found (404)"
+        description="The topic, library, or lesson you requested does not exist or has been relocated."
+        actionLabel="Explore All Libraries"
+        onAction={() => window.location.assign('/libraries')}
+      />
+    </div>
+  )
+}
+
 // Build complete Route Tree
 const routeTree = rootRoute.addChildren([
   indexRoute,
@@ -107,6 +145,8 @@ const routeTree = rootRoute.addChildren([
 export const router = createRouter({
   routeTree,
   defaultPreload: 'intent',
+  defaultErrorComponent: RouterErrorComponent,
+  defaultNotFoundComponent: RouterNotFoundComponent,
 })
 
 declare module '@tanstack/react-router' {

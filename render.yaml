@@ -1,0 +1,27 @@
+# Render Blueprint specification for TanStack Playground Backend
+# Documentation: https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: tanstack-playground-backend
+    runtime: docker
+    dockerfilePath: backend/Dockerfile
+    dockerContext: backend
+    plan: free
+    region: oregon
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: PORT
+        value: 8080
+      - key: SPRING_DATASOURCE_URL
+        sync: false # Set to your Neon PostgreSQL JDBC URL (e.g. jdbc:postgresql://ep-xyz.region.neon.tech/neondb?sslmode=require)
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false # Set to your Neon username
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false # Set to your Neon password
+      - key: JWT_SECRET
+        generateValue: true # Secure 256-bit secret generated automatically
+      - key: CORS_ALLOWED_ORIGINS
+        value: "https://tanstack-playground.vercel.app,http://localhost:5173"
+
