@@ -72,7 +72,7 @@ export default function App() {
       setRecentKey(keyName);
 
       // Mod+K or / opens command palette
-      if ((isMod && e.key.toLowerCase() === 'k') || (e.key === '/' && !isOpen)) {
+      if ((isMod && e.key?.toLowerCase() === 'k') || (e.key === '/' && !isOpen)) {
         e.preventDefault();
         setIsOpen((prev) => !prev);
       }
@@ -83,7 +83,7 @@ export default function App() {
       }
 
       // 'N' triggers new note when modal is closed
-      if (e.key.toLowerCase() === 'n' && !isOpen && !isMod) {
+      if (e.key?.toLowerCase() === 'n' && !isOpen && !isMod) {
         setLastAction('Created New Document (HotKey: N)');
       }
     };

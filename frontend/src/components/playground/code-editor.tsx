@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useEffect } from 'react'
 import Editor, { type OnMount } from '@monaco-editor/react'
 import {
   Copy,
@@ -12,6 +12,7 @@ import {
   FileCode,
   FileText,
   Lock,
+  Save,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
@@ -23,9 +24,12 @@ interface CodeEditorProps {
   code: string
   isDirty?: boolean
   dirtyFiles?: Set<string>
+  unsavedFiles?: Set<string>
+  hasUnsavedChanges?: boolean
   readOnly?: boolean
   onChange: (value: string) => void
   onSelectFile: (file: string) => void
+  onSave?: (currentCode?: string) => void
   onResetFile: () => void
   onResetAll: () => void
 }
@@ -57,20 +61,59 @@ export function MonacoCodeEditor({
   activeFile,
   code,
   dirtyFiles = new Set(),
+  unsavedFiles = new Set(),
+  hasUnsavedChanges = false,
   readOnly = false,
   onChange,
   onSelectFile,
+  onSave,
   onResetFile,
   onResetAll,
 }: CodeEditorProps) {
   const { theme } = useTheme()
   const editorRef = useRef<any>(null)
+  const onSaveRef = useRef(onSave)
+  onSaveRef.current = onSave
+
   const [copied, setCopied] = React.useState(false)
   const [fontSize, setFontSize] = React.useState(13)
   const [wordWrap, setWordWrap] = React.useState(true)
 
-  const handleEditorDidMount: OnMount = (editor) => {
+  const handleSave = () => {
+    const currentCode = editorRef.current ? editorRef.current.getValue() : code
+    onSaveRef.current?.(currentCode)
+  }
+
+  const handleEditorDidMount: OnMount = (editor, monaco) => {
     editorRef.current = editor
+
+    // Bind Ctrl+S / Cmd+S inside Monaco
+    if (monaco) {
+      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
+        handleSave()
+      })
+
+      // Configure Monaco compiler & diagnostics to eliminate false-positive module resolution errors
+      monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+        noSemanticValidation: true,
+        noSyntaxValidation: false,
+      })
+      monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+        noSemanticValidation: true,
+        noSyntaxValidation: false,
+      })
+      monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
+        target: monaco.languages.typescript.ScriptTarget.Latest,
+        allowNonTextExtensions: true,
+        moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
+        module: monaco.languages.typescript.ModuleKind.CommonJS,
+        noEmit: true,
+        esModuleInterop: true,
+        jsx: monaco.languages.typescript.JsxEmit.ReactJSX,
+        reactNamespace: 'React',
+        allowJs: true,
+      })
+    }
   }
 
   const handleCopy = async () => {
@@ -101,6 +144,7 @@ export function MonacoCodeEditor({
         <div className="flex items-center gap-1 overflow-x-auto scrollbar-none py-0.5">
           {files.map((file) => {
             const isActive = file === activeFile
+            const isFileUnsaved = unsavedFiles.has(file)
             const isFileDirty = dirtyFiles.has(file)
             const fileName = file.split('/').pop() ?? file
 
@@ -108,7 +152,7 @@ export function MonacoCodeEditor({
               <button
                 key={file}
                 onClick={() => onSelectFile(file)}
-                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xs font-mono text-xs transition-colors shrink-0 ${
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xs font-mono text-xs transition-colors shrink-0 cursor-pointer ${
                   isActive
                     ? 'bg-muted text-foreground font-semibold shadow-2xs'
                     : 'text-muted-foreground hover:text-foreground hover:bg-muted/40'
@@ -116,12 +160,17 @@ export function MonacoCodeEditor({
               >
                 {getFileIcon(file)}
                 <span>{fileName}</span>
-                {isFileDirty && (
+                {isFileUnsaved ? (
                   <span
-                    title="Modified file"
-                    className="h-1.5 w-1.5 rounded-full bg-amber-500 inline-block shrink-0"
+                    title="Unsaved changes in editor (Ctrl+S to save)"
+                    className="h-1.5 w-1.5 rounded-full bg-amber-500 inline-block shrink-0 animate-pulse"
                   />
-                )}
+                ) : isFileDirty ? (
+                  <span
+                    title="Modified from starter template"
+                    className="h-1.5 w-1.5 rounded-full bg-sky-500/80 inline-block shrink-0"
+                  />
+                ) : null}
               </button>
             )
           })}
@@ -136,13 +185,37 @@ export function MonacoCodeEditor({
             </span>
           )}
 
+          {/* Explicit Save Button */}
+          {!readOnly && (
+            <Button
+              size="sm"
+              variant={hasUnsavedChanges ? 'default' : 'outline'}
+              onClick={handleSave}
+              title="Save current file (Ctrl+S / Cmd+S)"
+              className={`h-7 px-2.5 text-xs gap-1.5 font-medium transition-all cursor-pointer ${
+                hasUnsavedChanges
+                  ? 'bg-primary text-primary-foreground shadow-xs font-semibold'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              <Save className="h-3.5 w-3.5" />
+              <span>Save</span>
+              <kbd className="hidden sm:inline-block text-[10px] font-mono opacity-70 bg-black/10 dark:bg-white/10 px-1 py-0.2 rounded-xs">
+                Ctrl+S
+              </kbd>
+              {hasUnsavedChanges && (
+                <span className="h-1.5 w-1.5 rounded-full bg-amber-300 inline-block animate-ping" />
+              )}
+            </Button>
+          )}
+
           {/* Word Wrap Toggle */}
           <Button
             size="sm"
             variant="ghost"
             onClick={() => setWordWrap(!wordWrap)}
             title={wordWrap ? 'Disable word wrap' : 'Enable word wrap'}
-            className={`h-7 px-2 text-xs ${wordWrap ? 'text-primary' : 'text-muted-foreground'}`}
+            className={`h-7 px-2 text-xs cursor-pointer ${wordWrap ? 'text-primary' : 'text-muted-foreground'}`}
           >
             <WrapText className="h-3.5 w-3.5" />
           </Button>
@@ -152,7 +225,7 @@ export function MonacoCodeEditor({
             <button
               onClick={() => setFontSize((s) => Math.max(11, s - 1))}
               disabled={fontSize <= 11}
-              className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-30"
+              className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-30 cursor-pointer"
               title="Decrease font size"
             >
               <ZoomOut className="h-3 w-3" />
@@ -161,7 +234,7 @@ export function MonacoCodeEditor({
             <button
               onClick={() => setFontSize((s) => Math.min(20, s + 1))}
               disabled={fontSize >= 20}
-              className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-30"
+              className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-30 cursor-pointer"
               title="Increase font size"
             >
               <ZoomIn className="h-3 w-3" />
@@ -174,7 +247,7 @@ export function MonacoCodeEditor({
             variant="ghost"
             onClick={handleFormat}
             title="Format document"
-            className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground"
+            className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground cursor-pointer"
           >
             <AlignLeft className="h-3.5 w-3.5" />
           </Button>
@@ -185,7 +258,7 @@ export function MonacoCodeEditor({
             variant="ghost"
             onClick={handleCopy}
             title="Copy current file code"
-            className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground"
+            className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground cursor-pointer"
           >
             {copied ? <Check className="h-3.5 w-3.5 text-emerald-500" /> : <Copy className="h-3.5 w-3.5" />}
           </Button>
@@ -195,8 +268,8 @@ export function MonacoCodeEditor({
             size="sm"
             variant="ghost"
             onClick={onResetFile}
-            title="Reset current file to original"
-            className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground"
+            title="Reset current file to original starter code"
+            className="h-7 px-2 text-xs text-muted-foreground hover:text-foreground cursor-pointer"
           >
             <RotateCcw className="h-3.5 w-3.5" />
           </Button>
@@ -207,7 +280,7 @@ export function MonacoCodeEditor({
               size="sm"
               variant="outline"
               onClick={onResetAll}
-              className="h-7 px-2 text-xs text-amber-500 border-amber-500/30 hover:bg-amber-500/10"
+              className="h-7 px-2 text-xs text-amber-500 border-amber-500/30 hover:bg-amber-500/10 cursor-pointer"
               title="Reset all modified files"
             >
               Reset All ({dirtyFiles.size})

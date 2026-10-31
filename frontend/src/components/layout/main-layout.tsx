@@ -33,7 +33,7 @@ export function MainLayout() {
       {/* Main Content Area */}
       <div className="flex flex-col flex-1 min-w-0 h-full overflow-hidden">
         <Navbar onOpenMobileMenu={() => setIsMobileOpen(true)} />
-        <main className="flex-1 overflow-y-auto scrollbar-thin">
+        <main className="flex-1 min-h-0 overflow-y-auto scrollbar-thin flex flex-col">
           <Outlet />
         </main>
       </div>

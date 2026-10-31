@@ -8,6 +8,10 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
+    show-sql: false
   flyway:
     enabled: false
-
+  h2:
+    console:
+      enabled: true
+      path: /h2-console

@@ -124,7 +124,7 @@ const catalogRoute = createRoute({
 
     // Filter and sort items based on search parameters
     const filtered = packages
-      .filter((pkg) => pkg.name.toLowerCase().includes(search.query.toLowerCase()))
+      .filter((pkg) => pkg.name?.toLowerCase().includes(search.query?.toLowerCase()))
       .sort((a, b) => {
         const modifier = search.order === 'asc' ? 1 : -1;
         if (search.sortBy === 'name') return a.name.localeCompare(b.name) * modifier;

@@ -111,7 +111,7 @@ export default function App() {
             },
             onChangeAsync: async ({ value }) => {
               await new Promise((r) => setTimeout(r, 400));
-              if (value.toLowerCase() === 'admin' || value.toLowerCase() === 'root') {
+              if (value?.toLowerCase() === 'admin' || value?.toLowerCase() === 'root') {
                 return 'Username "' + value + '" is reserved and cannot be claimed.';
               }
               return undefined;

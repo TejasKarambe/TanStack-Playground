@@ -79,3 +79,20 @@ body {
   color: hsl(var(--foreground));
   font-feature-settings: "rlig" 1, "calt" 1;
 }
+
+/* Ensure Sandpack preview fills 100% height and width without collapsing */
+.sp-wrapper,
+.sp-preview,
+.sp-preview-container,
+.sp-preview-iframe {
+  height: 100% !important;
+  width: 100% !important;
+  min-height: 0 !important;
+}
+
+/* Hide Sandpack's stuck loading overlay so the live preview output is always visible */
+.sp-overlay.sp-loading {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}

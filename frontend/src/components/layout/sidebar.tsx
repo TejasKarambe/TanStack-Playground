@@ -206,14 +206,14 @@ export function Sidebar({
                                 className={cn(
                                   'text-[9px] font-mono px-1 py-0.2 rounded-xs font-semibold uppercase',
                                   lib.maturity === 'RELEASE_CANDIDATE' &&
-                                    'bg-cyan-500/10 text-cyan-600 dark:text-cyan-400',
+                                  'bg-cyan-500/10 text-cyan-600 dark:text-cyan-400',
                                   lib.maturity === 'BETA' &&
-                                    'bg-amber-500/10 text-amber-600 dark:text-amber-400',
+                                  'bg-amber-500/10 text-amber-600 dark:text-amber-400',
                                   lib.maturity === 'ALPHA' &&
-                                    'bg-purple-500/10 text-purple-600 dark:text-purple-400'
+                                  'bg-purple-500/10 text-purple-600 dark:text-purple-400'
                                 )}
                               >
-                                {lib.maturity === 'RELEASE_CANDIDATE' ? 'RC' : lib.maturity.toLowerCase()}
+                                {lib.maturity === 'RELEASE_CANDIDATE' ? 'RC' : lib.maturity?.toLowerCase()}
                               </span>
                             )}
                           </div>

@@ -128,7 +128,7 @@ export default function App() {
             onChangeAsync: async ({ value }) => {
               // Simulated server check with 600ms latency
               await new Promise((resolve) => setTimeout(resolve, 600));
-              if (takenHandles.includes(value.toLowerCase())) {
+              if (takenHandles.includes(value?.toLowerCase())) {
                 return \`The handle "@\${value}" is already registered by another account.\`;
               }
               return undefined;

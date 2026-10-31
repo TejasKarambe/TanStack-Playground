@@ -297,11 +297,11 @@ export async function queryBackendDatabase(params: {
 
   // 1. Server-Side Filtering (SQL WHERE)
   if (params.search) {
-    const q = params.search.toLowerCase();
+    const q = params.search?.toLowerCase();
     records = records.filter(
       (r) =>
-        r.name.toLowerCase().includes(q) ||
-        r.department.toLowerCase().includes(q)
+        r.name?.toLowerCase().includes(q) ||
+        r.department?.toLowerCase().includes(q)
     );
   }
 

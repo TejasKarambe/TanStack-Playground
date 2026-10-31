@@ -14,9 +14,9 @@ export function LibrariesView() {
 
   const filteredLibraries = TANSTACK_LIBRARIES.filter((lib) => {
     const matchesSearch =
-      lib.name.toLowerCase().includes(search.toLowerCase()) ||
-      lib.packageName.toLowerCase().includes(search.toLowerCase()) ||
-      lib.description.toLowerCase().includes(search.toLowerCase())
+      lib.name?.toLowerCase().includes(search?.toLowerCase()) ||
+      lib.packageName?.toLowerCase().includes(search?.toLowerCase()) ||
+      lib.description?.toLowerCase().includes(search?.toLowerCase())
 
     if (!matchesSearch) return false
 
@@ -42,31 +42,28 @@ export function LibrariesView() {
         <div className="flex items-center gap-1.5 p-1 rounded-lg bg-muted border border-border w-fit">
           <button
             onClick={() => setFilter('ALL')}
-            className={`px-3 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
-              filter === 'ALL'
+            className={`px-3 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${filter === 'ALL'
                 ? 'bg-background text-foreground shadow-2xs'
                 : 'text-muted-foreground hover:text-foreground'
-            }`}
+              }`}
           >
             All Libraries ({TANSTACK_LIBRARIES.length})
           </button>
           <button
             onClick={() => setFilter('STABLE')}
-            className={`px-3 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
-              filter === 'STABLE'
+            className={`px-3 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${filter === 'STABLE'
                 ? 'bg-background text-foreground shadow-2xs'
                 : 'text-muted-foreground hover:text-foreground'
-            }`}
+              }`}
           >
             Production Stable
           </button>
           <button
             onClick={() => setFilter('ECOSYSTEM')}
-            className={`px-3 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
-              filter === 'ECOSYSTEM'
+            className={`px-3 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${filter === 'ECOSYSTEM'
                 ? 'bg-background text-foreground shadow-2xs'
                 : 'text-muted-foreground hover:text-foreground'
-            }`}
+              }`}
           >
             RC / Beta / New
           </button>

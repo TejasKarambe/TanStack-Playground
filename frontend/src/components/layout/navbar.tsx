@@ -11,6 +11,7 @@ import {
   Bookmark,
   LogIn,
   LogOut,
+  Search,
 } from 'lucide-react'
 import { GitHubIcon } from '@/components/github-icon'
 import { useTheme } from '@/components/theme-provider'
@@ -18,6 +19,7 @@ import { useAuth } from '@/context/auth-context'
 import { IconButton } from '@/components/ui/icon-button'
 import { Button } from '@/components/ui/button'
 import { SearchInput } from '@/components/ui/search-input'
+import { SearchDialog } from './search-dialog'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -44,7 +46,7 @@ export function Navbar({ onOpenMobileMenu }: NavbarProps) {
   const { theme, setTheme, resolvedTheme } = useTheme()
   const { user, isAuthenticated, openAuthModal, logout } = useAuth()
   const location = useLocation()
-  const [searchQuery, setSearchQuery] = useState('')
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
 
   // Build dynamic breadcrumbs
   const pathSegments = location.pathname.split('/').filter(Boolean)
@@ -130,14 +132,31 @@ export function Navbar({ onOpenMobileMenu }: NavbarProps) {
 
       {/* Center/Right: SearchInput & Actions */}
       <div className="flex items-center gap-2">
+        {/* Desktop Search Button */}
         <div className="hidden lg:block w-64">
-          <SearchInput
-            placeholder="Search lessons & APIs..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onClear={() => setSearchQuery('')}
-          />
+          <button
+            type="button"
+            onClick={() => setIsSearchOpen(true)}
+            className="w-full text-left cursor-pointer"
+            title="Search lessons, libraries, and APIs (Cmd+K / Ctrl+K)"
+          >
+            <SearchInput
+              placeholder="Search lessons & APIs..."
+              readOnly
+              shortcut="⌘K"
+              className="cursor-pointer hover:border-primary/50 transition-colors"
+            />
+          </button>
         </div>
+
+        {/* Mobile/Tablet Search Button */}
+        <IconButton
+          label="Search lessons & APIs"
+          onClick={() => setIsSearchOpen(true)}
+          className="lg:hidden h-8 w-8 text-foreground"
+        >
+          <Search className="h-4 w-4" />
+        </IconButton>
 
         {/* Official TanStack Docs link */}
         <IconButton
@@ -236,6 +255,9 @@ export function Navbar({ onOpenMobileMenu }: NavbarProps) {
           </Button>
         )}
       </div>
+
+      {/* Global Interactive Command Search Dialog */}
+      <SearchDialog open={isSearchOpen} onOpenChange={setIsSearchOpen} />
     </header>
   )
 }
