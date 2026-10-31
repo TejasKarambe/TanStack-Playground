@@ -303,7 +303,7 @@ export function LivePreview({ autoRun: _autoRun = true, onToggleAutoRun: _onTogg
             variant={showConsole ? 'secondary' : 'ghost'}
             onClick={() => setShowConsole(!showConsole)}
             title={showConsole ? 'Hide Console Panel' : 'Open Console Panel with Draggable Resizer'}
-            className="h-7 px-2 text-xs gap-1.5 cursor-pointer relative"
+            className="h-7 px-2 text-xs gap-1.5 cursor-pointer relative text-muted-foreground hover:text-foreground"
           >
             <Terminal className="h-3.5 w-3.5" />
             <span className="hidden sm:inline">Console</span>
