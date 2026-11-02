@@ -87,6 +87,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/topics/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/examples/**").permitAll()
 
+                        // Public Health & Monitoring (No auth required)
+                        .requestMatchers(HttpMethod.GET, "/api/health").permitAll()
+
                         // Public Auth Endpoints
                         .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
