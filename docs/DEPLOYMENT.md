@@ -104,7 +104,7 @@ The repository contains a [`render.yaml`](../render.yaml) file at the root.
 ### Free-Tier Cold Starts & Availability Notice
 > [!NOTE]
 > Render free web services spin down after 15 minutes of inactivity. When a request arrives, the service experiences a **cold start of 40–60 seconds**.
-> * The public health check endpoint `/actuator/health` can be pinged by UptimeRobot or Cron to keep the service warm if desired.
+> * The public health check endpoints `GET /api/health` and `GET /actuator/health` require no authentication and can be pinged by UptimeRobot, BetterStack, or cron every 10–14 minutes to keep the service warm and monitor server/database health.
 > * The frontend gracefully handles offline states: if the backend is spinning up or unreachable, users can continue editing code, running Sandpack examples, and exploring lessons in **Anonymous Guest Mode**.
 
 ---
