@@ -133,9 +133,6 @@ export function LibraryDetailView() {
                       <Badge variant="outline" className="text-[10px] px-1.5 py-0">
                         {topic.difficulty}
                       </Badge>
-                      {topic.isBookmarked && (
-                        <Bookmark className="h-3.5 w-3.5 fill-amber-500 text-amber-500" />
-                      )}
                     </div>
                     <p className="text-xs text-muted-foreground line-clamp-2">
                       {topic.summary}
