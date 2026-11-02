@@ -1,0 +1,26 @@
+# Environment files
+.env
+*.env
+.env.*
+.env.local
+.env.production
+
+# Dependencies
+node_modules/
+target/
+
+# Build outputs
+dist/
+build/
+
+# IDE & Editor
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# OS Files
+.DS_Store
+Thumbs.db
+
