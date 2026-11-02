@@ -26,18 +26,11 @@ public class UserProgressService {
     private final UserProgressRepository userProgressRepository;
     private final UserRepository userRepository;
     private final TopicRepository topicRepository;
+    private final BookmarkService bookmarkService;
     private final EntityDtoMapper mapper;
 
     public Topic findTopicByIdOrSlug(String identifier) {
-        try {
-            UUID id = UUID.fromString(identifier);
-            return topicRepository.findById(id)
-                    .or(() -> topicRepository.findBySlug(identifier))
-                    .orElseThrow(() -> new ResourceNotFoundException("Topic not found with id or slug: " + identifier));
-        } catch (IllegalArgumentException e) {
-            return topicRepository.findBySlug(identifier)
-                    .orElseThrow(() -> new ResourceNotFoundException("Topic not found with slug: " + identifier));
-        }
+        return bookmarkService.findTopicByIdOrSlug(identifier);
     }
 
     @Transactional

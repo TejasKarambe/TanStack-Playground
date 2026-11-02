@@ -57,11 +57,7 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void initLibraries() {
-        if (libraryRepository.count() > 0) {
-            return;
-        }
-
-        log.info("Seeding TanStack Ecosystem Libraries into empty database...");
+        log.info("Ensuring TanStack Ecosystem Libraries and Topics are fully seeded...");
 
         seedLibrary(
                 "query",
@@ -269,29 +265,30 @@ public class DataInitializer implements CommandLineRunner {
             String status,
             List<TopicSeed> topics
     ) {
-        Library library = Library.builder()
-                .slug(slug)
-                .name(name)
-                .description(description)
-                .packageName(packageName)
-                .icon(icon)
-                .documentationUrl(documentationUrl)
-                .status(status)
-                .build();
-
-        Library saved = libraryRepository.save(library);
+        Library library = libraryRepository.findBySlug(slug)
+                .orElseGet(() -> libraryRepository.save(Library.builder()
+                        .slug(slug)
+                        .name(name)
+                        .description(description)
+                        .packageName(packageName)
+                        .icon(icon)
+                        .documentationUrl(documentationUrl)
+                        .status(status)
+                        .build()));
 
         for (TopicSeed seed : topics) {
-            Topic topic = Topic.builder()
-                    .library(saved)
-                    .slug(seed.slug)
-                    .title(seed.title)
-                    .difficulty(seed.difficulty)
-                    .estimatedMinutes(seed.estimatedMinutes)
-                    .orderIndex(seed.orderIndex)
-                    .documentationUrl(documentationUrl)
-                    .build();
-            topicRepository.save(topic);
+            if (topicRepository.findBySlug(seed.slug).isEmpty()) {
+                Topic topic = Topic.builder()
+                        .library(library)
+                        .slug(seed.slug)
+                        .title(seed.title)
+                        .difficulty(seed.difficulty)
+                        .estimatedMinutes(seed.estimatedMinutes)
+                        .orderIndex(seed.orderIndex)
+                        .documentationUrl(documentationUrl)
+                        .build();
+                topicRepository.save(topic);
+            }
         }
     }
 

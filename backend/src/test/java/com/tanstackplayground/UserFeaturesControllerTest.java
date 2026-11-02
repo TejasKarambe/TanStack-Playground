@@ -153,6 +153,51 @@ class UserFeaturesControllerTest {
     }
 
     @Test
+    void testBookmarkBySlugAndBookmarkId() throws Exception {
+        // 1. Add bookmark by slug (e.g. devtools-inspection which gets auto-provisioned or found)
+        MvcResult addResult = mockMvc.perform(post("/api/bookmarks/devtools-inspection")
+                        .cookie(authCookie))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.topicSlug").value("devtools-inspection"))
+                .andExpect(jsonPath("$.id").exists())
+                .andReturn();
+
+        String responseContent = addResult.getResponse().getContentAsString();
+        com.fasterxml.jackson.databind.JsonNode jsonNode = objectMapper.readTree(responseContent);
+        String bookmarkId = jsonNode.get("id").asText();
+
+        // 2. Delete bookmark using Bookmark ID directly
+        mockMvc.perform(delete("/api/bookmarks/" + bookmarkId)
+                        .cookie(authCookie))
+                .andExpect(status().isNoContent());
+
+        // Verify bookmark was deleted
+        mockMvc.perform(get("/api/bookmarks")
+                        .cookie(authCookie))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+
+        // 3. Add bookmark via request body
+        mockMvc.perform(post("/api/bookmarks")
+                        .cookie(authCookie)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"topicSlug\":\"devtools-inspection\"}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.topicSlug").value("devtools-inspection"));
+
+        // 4. Delete bookmark using slug
+        mockMvc.perform(delete("/api/bookmarks/devtools-inspection")
+                        .cookie(authCookie))
+                .andExpect(status().isNoContent());
+
+        // Verify empty
+        mockMvc.perform(get("/api/bookmarks")
+                        .cookie(authCookie))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    @Test
     void testUserPreferencesFlow() throws Exception {
         // Get initial preferences (default)
         mockMvc.perform(get("/api/preferences")

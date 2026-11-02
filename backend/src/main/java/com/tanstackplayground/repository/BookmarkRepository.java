@@ -14,5 +14,8 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, UUID> {
     List<Bookmark> findByUserIdOrderByCreatedAtDesc(UUID userId);
     boolean existsByUserIdAndTopicId(UUID userId, UUID topicId);
     void deleteByUserIdAndTopicId(UUID userId, UUID topicId);
+    Optional<Bookmark> findByIdAndUserId(UUID id, UUID userId);
+    boolean existsByIdAndUserId(UUID id, UUID userId);
+    void deleteByIdAndUserId(UUID id, UUID userId);
 }
 
