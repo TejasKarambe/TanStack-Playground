@@ -57,7 +57,7 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void initLibraries() {
-        log.info("Ensuring TanStack Ecosystem Libraries and Topics are fully seeded...");
+        log.info("Ensuring TanStack Ecosystem Libraries and Topics are fully seeded with correct slugs...");
 
         seedLibrary(
                 "query",
@@ -68,20 +68,18 @@ public class DataInitializer implements CommandLineRunner {
                 "https://tanstack.com/query/latest",
                 "STABLE",
                 List.of(
-                        new TopicSeed("query-basics", "Basic Query: Lifecycle States", "BEGINNER", 15, 0),
-                        new TopicSeed("query-keys", "Query Keys & Cache Identifiers", "BEGINNER", 20, 1),
-                        new TopicSeed("query-caching", "Query Caching & Garbage Collection", "INTERMEDIATE", 25, 2),
-                        new TopicSeed("stale-time", "Stale Time vs GC Time", "INTERMEDIATE", 20, 3),
-                        new TopicSeed("mutations", "Mutations & Server State Changes", "INTERMEDIATE", 25, 4),
-                        new TopicSeed("query-invalidation", "Query Invalidation & Re-fetching", "INTERMEDIATE", 20, 5),
-                        new TopicSeed("optimistic-updates", "Optimistic Updates & Rollback", "ADVANCED", 30, 6),
-                        new TopicSeed("pagination", "Pagination with keepPreviousData", "INTERMEDIATE", 25, 7),
-                        new TopicSeed("infinite-queries", "Infinite Queries & Bi-directional Feeds", "ADVANCED", 35, 8),
-                        new TopicSeed("dependent-queries", "Dependent & Chained Queries", "INTERMEDIATE", 20, 9),
-                        new TopicSeed("parallel-queries", "Parallel & Dynamic Queries", "INTERMEDIATE", 20, 10),
-                        new TopicSeed("prefetching", "Prefetching & Router Integration", "ADVANCED", 25, 11),
-                        new TopicSeed("cancellation", "Query Cancellation with AbortSignal", "ADVANCED", 25, 12),
-                        new TopicSeed("error-handling", "Robust Error Handling & Error Boundaries", "INTERMEDIATE", 20, 13)
+                        new TopicSeed("query-basics", "Basic Query", "BEGINNER", 15, 1),
+                        new TopicSeed("query-keys", "Query Keys", "BEGINNER", 20, 2),
+                        new TopicSeed("query-caching", "Query Caching", "BEGINNER", 20, 3),
+                        new TopicSeed("query-stale-time", "Stale Time & Garbage Collection", "INTERMEDIATE", 20, 4),
+                        new TopicSeed("query-mutations", "Mutations", "BEGINNER", 20, 5),
+                        new TopicSeed("query-invalidation", "Query Invalidation", "BEGINNER", 20, 6),
+                        new TopicSeed("query-optimistic-updates", "Optimistic Updates", "INTERMEDIATE", 25, 7),
+                        new TopicSeed("query-pagination", "Pagination", "INTERMEDIATE", 25, 8),
+                        new TopicSeed("query-infinite-scroll", "Infinite Queries", "ADVANCED", 25, 9),
+                        new TopicSeed("query-dependent", "Dependent Queries", "INTERMEDIATE", 20, 10),
+                        new TopicSeed("query-parallel", "Parallel Queries", "INTERMEDIATE", 20, 11),
+                        new TopicSeed("query-cancellation", "Query Cancellation", "ADVANCED", 20, 12)
                 )
         );
 
@@ -94,15 +92,17 @@ public class DataInitializer implements CommandLineRunner {
                 "https://tanstack.com/table/latest",
                 "STABLE",
                 List.of(
-                        new TopicSeed("basic-table", "Basic Table & Column Definitions", "BEGINNER", 15, 0),
-                        new TopicSeed("sorting", "Multi-Column Sorting", "BEGINNER", 20, 1),
-                        new TopicSeed("filtering", "Global & Column-Level Filtering", "INTERMEDIATE", 25, 2),
-                        new TopicSeed("pagination-table", "Client & Server Pagination", "INTERMEDIATE", 20, 3),
-                        new TopicSeed("row-selection", "Row Selection & Batch Actions", "INTERMEDIATE", 20, 4),
-                        new TopicSeed("column-visibility", "Dynamic Column Visibility & Reordering", "INTERMEDIATE", 25, 5),
-                        new TopicSeed("expanding", "Row Expanding & Sub-components", "ADVANCED", 30, 6),
-                        new TopicSeed("editable-cells", "Inline Editable Cells & Validation", "ADVANCED", 35, 7),
-                        new TopicSeed("virtualized-table-topic", "High Performance Virtualized Table", "ADVANCED", 35, 8)
+                        new TopicSeed("table-basics", "Basic Table", "BEGINNER", 15, 1),
+                        new TopicSeed("table-sorting", "Sorting", "BEGINNER", 20, 2),
+                        new TopicSeed("table-filtering", "Filtering", "INTERMEDIATE", 20, 3),
+                        new TopicSeed("table-pagination", "Pagination", "INTERMEDIATE", 20, 4),
+                        new TopicSeed("table-row-selection", "Row Selection", "INTERMEDIATE", 20, 5),
+                        new TopicSeed("table-column-visibility", "Column Visibility", "INTERMEDIATE", 20, 6),
+                        new TopicSeed("table-column-ordering", "Column Ordering", "INTERMEDIATE", 20, 7),
+                        new TopicSeed("table-grouping", "Grouping & Aggregation", "ADVANCED", 25, 8),
+                        new TopicSeed("table-editable-cells", "Editable Cells", "INTERMEDIATE", 20, 9),
+                        new TopicSeed("table-server-side", "Server-Side Operations", "ADVANCED", 25, 10),
+                        new TopicSeed("table-virtualized", "Virtualized Table", "ADVANCED", 25, 11)
                 )
         );
 
@@ -115,15 +115,15 @@ public class DataInitializer implements CommandLineRunner {
                 "https://tanstack.com/router/latest",
                 "STABLE",
                 List.of(
-                        new TopicSeed("route-definitions", "Type-safe Route Definitions", "BEGINNER", 15, 0),
-                        new TopicSeed("dynamic-params", "Dynamic Route Parameters", "BEGINNER", 20, 1),
-                        new TopicSeed("search-params", "Search Params Schema Validation with Zod", "INTERMEDIATE", 25, 2),
-                        new TopicSeed("navigation", "Type-safe Navigation & Link Components", "BEGINNER", 15, 3),
-                        new TopicSeed("loaders", "Route Loaders & Parallel Data Fetching", "INTERMEDIATE", 25, 4),
-                        new TopicSeed("route-context", "Route Context & Dependency Injection", "INTERMEDIATE", 25, 5),
-                        new TopicSeed("error-boundaries", "Error Boundaries & Not Found Handling", "INTERMEDIATE", 20, 6),
-                        new TopicSeed("auth-guards", "Authentication Guards & Redirection", "ADVANCED", 30, 7),
-                        new TopicSeed("query-integration", "Query Integration & Automatic Prefetching", "ADVANCED", 30, 8)
+                        new TopicSeed("router-basics", "Basic Routes", "BEGINNER", 20, 1),
+                        new TopicSeed("router-dynamic-routes", "Dynamic Route", "INTERMEDIATE", 20, 2),
+                        new TopicSeed("router-search-params", "Search Parameters", "INTERMEDIATE", 25, 3),
+                        new TopicSeed("router-navigation", "Programmatic Navigation", "BEGINNER", 20, 4),
+                        new TopicSeed("router-loaders", "Route Loaders", "INTERMEDIATE", 20, 5),
+                        new TopicSeed("router-context", "Route Context", "INTERMEDIATE", 20, 6),
+                        new TopicSeed("router-errors", "Error Boundaries & 404", "INTERMEDIATE", 20, 7),
+                        new TopicSeed("router-auth-guards", "Authentication Guards", "INTERMEDIATE", 20, 8),
+                        new TopicSeed("router-query-integration", "TanStack Query Integration", "ADVANCED", 25, 9)
                 )
         );
 
@@ -132,35 +132,35 @@ public class DataInitializer implements CommandLineRunner {
                 "TanStack Form",
                 "High-performance headless form state management with fine-grained reactivity.",
                 "@tanstack/react-form",
-                "FileCheck",
+                "CheckSquare",
                 "https://tanstack.com/form/latest",
                 "STABLE",
                 List.of(
-                        new TopicSeed("basic-form", "Basic Form & useForm Hook", "BEGINNER", 15, 0),
-                        new TopicSeed("field-validation", "Synchronous Field Validation", "BEGINNER", 20, 1),
-                        new TopicSeed("form-submission", "Form Submission & State Handlers", "BEGINNER", 15, 2),
-                        new TopicSeed("async-validation", "Asynchronous Validation & Debouncing", "INTERMEDIATE", 25, 3),
-                        new TopicSeed("dependent-fields", "Dependent & Linked Fields", "INTERMEDIATE", 25, 4),
-                        new TopicSeed("dynamic-fields", "Dynamic Field Arrays", "ADVANCED", 30, 5),
-                        new TopicSeed("server-side-validation", "Server-Side Validation Mapping", "ADVANCED", 30, 6)
+                        new TopicSeed("form-basics", "Basic Form", "BEGINNER", 15, 1),
+                        new TopicSeed("form-validation", "Field Validation", "INTERMEDIATE", 20, 2),
+                        new TopicSeed("form-submission", "Form Submission", "INTERMEDIATE", 20, 3),
+                        new TopicSeed("form-async-validation", "Async Validation", "INTERMEDIATE", 20, 4),
+                        new TopicSeed("form-dependent-fields", "Dependent Fields", "INTERMEDIATE", 20, 5),
+                        new TopicSeed("form-dynamic-fields", "Dynamic Fields & Arrays", "INTERMEDIATE", 20, 6),
+                        new TopicSeed("form-server-validation", "Server Error Mapping", "ADVANCED", 20, 7)
                 )
         );
 
         seedLibrary(
                 "virtual",
                 "TanStack Virtual",
-                "Headless virtualization for huge scrollable lists, grids, and tables.",
+                "Headless DOM virtualization for 10,000+ item lists, tables, and grids at 60 FPS.",
                 "@tanstack/react-virtual",
                 "Layers",
                 "https://tanstack.com/virtual/latest",
                 "STABLE",
                 List.of(
-                        new TopicSeed("virtual-list", "Virtual List with Fixed Row Heights", "BEGINNER", 15, 0),
-                        new TopicSeed("large-dataset", "10,000+ Items Virtualization", "INTERMEDIATE", 20, 1),
-                        new TopicSeed("variable-height", "Dynamic & Variable Row Heights", "INTERMEDIATE", 25, 2),
-                        new TopicSeed("horizontal-virtual", "Horizontal Virtualization", "INTERMEDIATE", 20, 3),
-                        new TopicSeed("grid-virtualization", "2D Grid Virtualization", "ADVANCED", 30, 4),
-                        new TopicSeed("virtual-table", "Virtualized High-Volume Table", "ADVANCED", 35, 5)
+                        new TopicSeed("virtual-10k-list", "Basic Virtual List", "BEGINNER", 15, 1),
+                        new TopicSeed("virtual-large-dataset", "Large Dataset (100k Items)", "INTERMEDIATE", 20, 2),
+                        new TopicSeed("virtual-variable-height", "Variable-Height Rows", "INTERMEDIATE", 20, 3),
+                        new TopicSeed("virtual-horizontal", "Horizontal Virtualization", "INTERMEDIATE", 20, 4),
+                        new TopicSeed("virtual-grid", "2D Grid Virtualization", "ADVANCED", 25, 5),
+                        new TopicSeed("virtual-table", "Virtualized Table", "ADVANCED", 20, 6)
                 )
         );
 
@@ -169,21 +169,24 @@ public class DataInitializer implements CommandLineRunner {
                 "TanStack Start",
                 "Full-stack React framework powered by TanStack Router and Vite server functions.",
                 "@tanstack/react-start",
-                "Rocket",
+                "Zap",
                 "https://tanstack.com/start/latest",
-                "BETA",
-                List.of(new TopicSeed("server-functions", "Server Functions & RPC", "INTERMEDIATE", 25, 0))
+                "RELEASE_CANDIDATE",
+                List.of(
+                        new TopicSeed("start-server-functions", "Server Functions RPC Simulation", "INTERMEDIATE", 20, 1),
+                        new TopicSeed("start-ssr-hydration", "SSR Hydration & Metadata", "ADVANCED", 25, 2)
+                )
         );
 
         seedLibrary(
                 "db",
                 "TanStack DB",
-                "Client-side reactive relational database with SQLite / Dexie persistence.",
+                "Local-first reactive client store designed for high-performance synchronization.",
                 "@tanstack/db",
                 "HardDrive",
-                "https://tanstack.com/db",
-                "ALPHA",
-                List.of(new TopicSeed("collections", "Reactive Collections & Queries", "INTERMEDIATE", 25, 0))
+                "https://tanstack.com",
+                "RELEASE_CANDIDATE",
+                List.of(new TopicSeed("db-collections", "Collections & Local Queries", "INTERMEDIATE", 20, 1))
         );
 
         seedLibrary(
@@ -194,7 +197,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Box",
                 "https://tanstack.com/store/latest",
                 "STABLE",
-                List.of(new TopicSeed("store-basics", "Reactive Stores & Derived State", "BEGINNER", 15, 0))
+                List.of(new TopicSeed("store-basics", "Standalone Reactive State", "BEGINNER", 15, 1))
         );
 
         seedLibrary(
@@ -203,9 +206,9 @@ public class DataInitializer implements CommandLineRunner {
                 "Rate-limiting, queuing, batching, and debouncing utilities.",
                 "@tanstack/pacer",
                 "Gauge",
-                "https://tanstack.com/pacer",
+                "https://github.com/tanstack/pacer",
                 "BETA",
-                List.of(new TopicSeed("debouncing", "Rate Limiting & Batched Queues", "BEGINNER", 15, 0))
+                List.of(new TopicSeed("pacer-debouncing", "Debouncing & Task Queues", "BEGINNER", 15, 1))
         );
 
         seedLibrary(
@@ -213,10 +216,10 @@ public class DataInitializer implements CommandLineRunner {
                 "TanStack Devtools",
                 "Universal debugging panel for inspecting Query, Router, and Table state.",
                 "@tanstack/react-query-devtools",
-                "Cpu",
+                "Wrench",
                 "https://tanstack.com",
                 "STABLE",
-                List.of(new TopicSeed("devtools-inspection", "Devtools Cache Inspection", "BEGINNER", 15, 0))
+                List.of(new TopicSeed("devtools-inspection", "Inspecting Query Cache & Traces", "BEGINNER", 15, 1))
         );
 
         seedLibrary(
@@ -226,19 +229,19 @@ public class DataInitializer implements CommandLineRunner {
                 "@tanstack/react-ranger",
                 "Sliders",
                 "https://tanstack.com/ranger/latest",
-                "STABLE",
-                List.of(new TopicSeed("multi-slider", "Multi-thumb Sliders & Steps", "BEGINNER", 15, 0))
+                "ALPHA",
+                List.of(new TopicSeed("ranger-multi-slider", "Multi-Handle Sliders", "INTERMEDIATE", 15, 1))
         );
 
         seedLibrary(
                 "hotkeys",
                 "TanStack Hotkeys",
                 "Keyboard shortcut management with scopes and sequences.",
-                "@tanstack/hotkeys",
+                "@tanstack/react-hotkeys",
                 "Keyboard",
-                "https://tanstack.com/hotkeys",
-                "ALPHA",
-                List.of(new TopicSeed("key-sequences", "Keyboard Shortcuts & Scopes", "BEGINNER", 15, 0))
+                "https://github.com/tanstack/hotkeys",
+                "BETA",
+                List.of(new TopicSeed("hotkeys-sequences", "Key Combinations & Scopes", "BEGINNER", 15, 1))
         );
 
         seedLibrary(
@@ -247,9 +250,9 @@ public class DataInitializer implements CommandLineRunner {
                 "Streaming LLM completions and generative UI primitives.",
                 "@tanstack/ai",
                 "Sparkles",
-                "https://tanstack.com/ai",
-                "ALPHA",
-                List.of(new TopicSeed("streaming-chat", "Streaming Completions & UI", "INTERMEDIATE", 25, 0))
+                "https://github.com/tanstack/ai",
+                "RELEASE_CANDIDATE",
+                List.of(new TopicSeed("ai-tool-streams", "Streaming Tool Invocations", "ADVANCED", 20, 1))
         );
 
         log.info("TanStack Ecosystem seed completed successfully.");

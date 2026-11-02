@@ -52,30 +52,33 @@ public class BookmarkService {
     public Topic autoProvisionTopic(String slug) {
         log.info("Auto-provisioning topic for slug: {}", slug);
 
-        String librarySlug = "query";
-        if (slug.startsWith("devtools-")) {
-            librarySlug = "devtools";
-        } else if (slug.startsWith("table-") || slug.contains("-table") || slug.equals("sorting") || slug.equals("filtering") || slug.equals("expanding") || slug.equals("editable-cells")) {
+        // Determine library from slug prefix — matches frontend libraries-data.ts id naming
+        String librarySlug = "query"; // default
+        if (slug.startsWith("query-")) {
+            librarySlug = "query";
+        } else if (slug.startsWith("table-")) {
             librarySlug = "table";
-        } else if (slug.startsWith("router-") || slug.startsWith("route-") || slug.equals("navigation") || slug.equals("loaders") || slug.equals("auth-guards") || slug.equals("dynamic-params") || slug.equals("search-params")) {
+        } else if (slug.startsWith("router-")) {
             librarySlug = "router";
-        } else if (slug.startsWith("form-") || slug.contains("-form") || slug.contains("-field") || slug.contains("-validation") || slug.equals("form-submission")) {
+        } else if (slug.startsWith("form-")) {
             librarySlug = "form";
-        } else if (slug.startsWith("virtual-") || slug.equals("large-dataset") || slug.equals("variable-height") || slug.equals("horizontal-virtual") || slug.equals("grid-virtualization")) {
+        } else if (slug.startsWith("virtual-")) {
             librarySlug = "virtual";
-        } else if (slug.startsWith("start-") || slug.equals("server-functions")) {
+        } else if (slug.startsWith("start-")) {
             librarySlug = "start";
-        } else if (slug.startsWith("db-") || slug.equals("collections")) {
+        } else if (slug.startsWith("db-")) {
             librarySlug = "db";
         } else if (slug.startsWith("store-")) {
             librarySlug = "store";
-        } else if (slug.startsWith("pacer-") || slug.equals("debouncing")) {
+        } else if (slug.startsWith("pacer-")) {
             librarySlug = "pacer";
-        } else if (slug.startsWith("ranger-") || slug.equals("multi-slider")) {
+        } else if (slug.startsWith("devtools-")) {
+            librarySlug = "devtools";
+        } else if (slug.startsWith("ranger-")) {
             librarySlug = "ranger";
-        } else if (slug.startsWith("hotkey-") || slug.equals("key-sequences")) {
+        } else if (slug.startsWith("hotkeys-")) {
             librarySlug = "hotkeys";
-        } else if (slug.startsWith("ai-") || slug.equals("streaming-chat")) {
+        } else if (slug.startsWith("ai-")) {
             librarySlug = "ai";
         }
 
