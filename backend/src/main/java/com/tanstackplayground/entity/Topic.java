@@ -11,9 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "topics", uniqueConstraints = {
-    @UniqueConstraint(name = "uq_library_topic_order", columnNames = {"library_id", "order_index"})
-})
+@Table(name = "topics")
 @Getter
 @Setter
 @NoArgsConstructor

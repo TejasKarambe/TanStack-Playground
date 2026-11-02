@@ -25,8 +25,7 @@ CREATE TABLE IF NOT EXISTS topics (
     order_index INTEGER NOT NULL DEFAULT 0,
     documentation_url VARCHAR(512),
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT uq_library_topic_order UNIQUE (library_id, order_index)
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS topic_contents (
