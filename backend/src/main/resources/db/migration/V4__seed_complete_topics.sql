@@ -321,7 +321,7 @@ INSERT INTO topics (id, library_id, slug, title, description, difficulty, estima
 SELECT 'b9000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-000000000009',
        'pacer-debouncing', 'Debouncing & Task Queues', 'Tame rapid user inputs and batch asynchronous operations with Pacer queues.',
        'BEGINNER', 15, 1, 'https://github.com/tanstack/pacer', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
-WHERE NOT EXISTS (SELECT 1 FROM topics WHERE slug = 'pacer-debouncing');
+WHERE NOT EXISTS (SELECT 1 FROM topics WHERE slug = 'pacer-debouncing') ON CONFLICT DO NOTHING;
 
 -- ============================================================
 -- DEVTOOLS TOPICS  (library: a0000000-0000-0000-0000-000000000010)
@@ -330,7 +330,7 @@ INSERT INTO topics (id, library_id, slug, title, description, difficulty, estima
 SELECT 'ba000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-000000000010',
        'devtools-inspection', 'Inspecting Query Cache & Traces', 'Mount embedded query devtools to inspect query keys, states, and cache timers.',
        'BEGINNER', 15, 1, 'https://tanstack.com', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
-WHERE NOT EXISTS (SELECT 1 FROM topics WHERE slug = 'devtools-inspection');
+WHERE NOT EXISTS (SELECT 1 FROM topics WHERE slug = 'devtools-inspection') ON CONFLICT DO NOTHING;
 
 -- ============================================================
 -- RANGER TOPICS  (library: a0000000-0000-0000-0000-000000000011)
@@ -339,7 +339,7 @@ INSERT INTO topics (id, library_id, slug, title, description, difficulty, estima
 SELECT 'bb000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-000000000011',
        'ranger-multi-slider', 'Multi-Handle Sliders', 'Build custom accessible range sliders with multiple drag handles.',
        'INTERMEDIATE', 15, 1, 'https://tanstack.com/ranger/latest', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
-WHERE NOT EXISTS (SELECT 1 FROM topics WHERE slug = 'ranger-multi-slider');
+WHERE NOT EXISTS (SELECT 1 FROM topics WHERE slug = 'ranger-multi-slider') ON CONFLICT DO NOTHING;
 
 -- ============================================================
 -- HOTKEYS TOPICS  (library: a0000000-0000-0000-0000-000000000012)
@@ -348,7 +348,7 @@ INSERT INTO topics (id, library_id, slug, title, description, difficulty, estima
 SELECT 'bc000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-000000000012',
        'hotkeys-sequences', 'Key Combinations & Scopes', 'Bind application actions to key combinations and scoped modal boundaries.',
        'BEGINNER', 15, 1, 'https://github.com/tanstack/hotkeys', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
-WHERE NOT EXISTS (SELECT 1 FROM topics WHERE slug = 'hotkeys-sequences');
+WHERE NOT EXISTS (SELECT 1 FROM topics WHERE slug = 'hotkeys-sequences') ON CONFLICT DO NOTHING;
 
 -- ============================================================
 -- AI TOPICS  (library: a0000000-0000-0000-0000-000000000013)
@@ -357,4 +357,4 @@ INSERT INTO topics (id, library_id, slug, title, description, difficulty, estima
 SELECT 'bd000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-000000000013',
        'ai-tool-streams', 'Streaming Tool Invocations', 'Coordinate streaming LLM responses and client tool callbacks.',
        'ADVANCED', 20, 1, 'https://github.com/tanstack/ai', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
-WHERE NOT EXISTS (SELECT 1 FROM topics WHERE slug = 'ai-tool-streams');
+WHERE NOT EXISTS (SELECT 1 FROM topics WHERE slug = 'ai-tool-streams') ON CONFLICT DO NOTHING;

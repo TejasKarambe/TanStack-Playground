@@ -14,7 +14,7 @@ VALUES (
     'STABLE',
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
-);
+) ON CONFLICT DO NOTHING;
 
 -- 2. TanStack Table
 INSERT INTO libraries (id, slug, name, description, package_name, icon, documentation_url, status, created_at, updated_at)
@@ -29,7 +29,7 @@ VALUES (
     'STABLE',
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
-);
+) ON CONFLICT DO NOTHING;
 
 -- 3. TanStack Router
 INSERT INTO libraries (id, slug, name, description, package_name, icon, documentation_url, status, created_at, updated_at)
@@ -44,7 +44,7 @@ VALUES (
     'STABLE',
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
-);
+) ON CONFLICT DO NOTHING;
 
 -- 4. TanStack Form
 INSERT INTO libraries (id, slug, name, description, package_name, icon, documentation_url, status, created_at, updated_at)
@@ -59,7 +59,7 @@ VALUES (
     'STABLE',
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
-);
+) ON CONFLICT DO NOTHING;
 
 -- 5. TanStack Virtual
 INSERT INTO libraries (id, slug, name, description, package_name, icon, documentation_url, status, created_at, updated_at)
@@ -74,7 +74,7 @@ VALUES (
     'STABLE',
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
-);
+) ON CONFLICT DO NOTHING;
 
 -- 6. TanStack Start
 INSERT INTO libraries (id, slug, name, description, package_name, icon, documentation_url, status, created_at, updated_at)
@@ -89,7 +89,7 @@ VALUES (
     'RELEASE_CANDIDATE',
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
-);
+) ON CONFLICT DO NOTHING;
 
 -- 7. TanStack DB
 INSERT INTO libraries (id, slug, name, description, package_name, icon, documentation_url, status, created_at, updated_at)
@@ -104,7 +104,7 @@ VALUES (
     'RELEASE_CANDIDATE',
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
-);
+) ON CONFLICT DO NOTHING;
 
 -- 8. TanStack Store
 INSERT INTO libraries (id, slug, name, description, package_name, icon, documentation_url, status, created_at, updated_at)
@@ -119,7 +119,7 @@ VALUES (
     'STABLE',
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
-);
+) ON CONFLICT DO NOTHING;
 
 -- 9. TanStack Pacer
 INSERT INTO libraries (id, slug, name, description, package_name, icon, documentation_url, status, created_at, updated_at)
@@ -134,7 +134,7 @@ VALUES (
     'BETA',
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
-);
+) ON CONFLICT DO NOTHING;
 
 -- 10. TanStack Devtools
 INSERT INTO libraries (id, slug, name, description, package_name, icon, documentation_url, status, created_at, updated_at)
@@ -149,7 +149,7 @@ VALUES (
     'STABLE',
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
-);
+) ON CONFLICT DO NOTHING;
 
 -- 11. TanStack Ranger
 INSERT INTO libraries (id, slug, name, description, package_name, icon, documentation_url, status, created_at, updated_at)
@@ -164,7 +164,7 @@ VALUES (
     'ALPHA',
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
-);
+) ON CONFLICT DO NOTHING;
 
 -- 12. TanStack Hotkeys
 INSERT INTO libraries (id, slug, name, description, package_name, icon, documentation_url, status, created_at, updated_at)
@@ -179,7 +179,7 @@ VALUES (
     'BETA',
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
-);
+) ON CONFLICT DO NOTHING;
 
 -- 13. TanStack AI
 INSERT INTO libraries (id, slug, name, description, package_name, icon, documentation_url, status, created_at, updated_at)
@@ -194,7 +194,7 @@ VALUES (
     'RELEASE_CANDIDATE',
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
-);
+) ON CONFLICT DO NOTHING;
 
 -- Seed Sample Topics for Query
 INSERT INTO topics (id, library_id, slug, title, description, difficulty, estimated_minutes, order_index, documentation_url, created_at, updated_at)
@@ -210,7 +210,7 @@ VALUES (
     'https://tanstack.com/query/latest/docs/framework/react/guides/queries',
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
-);
+) ON CONFLICT DO NOTHING;
 
 INSERT INTO topic_contents (id, topic_id, introduction, learning_objectives, explanation, key_concepts, example_notes)
 VALUES (
@@ -221,7 +221,7 @@ VALUES (
     'At its core, TanStack Query manages query caching for you based on query keys. Unlike traditional global state stores, it treats server data as an asynchronous cache.',
     '["queryKey: unique serializable cache identifier", "queryFn: async function returning data", "staleTime: time until data is marked stale"]',
     'Notice how the mock API introduces an artificial 600ms latency to demonstrate the isPending flag.'
-);
+) ON CONFLICT DO NOTHING;
 
 -- Seed Sample Example for Query Basics
 INSERT INTO examples (id, topic_id, title, description, difficulty, default_file, dependencies_json, is_active)
@@ -234,7 +234,7 @@ VALUES (
     '/App.tsx',
     '{"@tanstack/react-query": "^5.105.0", "lucide-react": "^1.65.0"}',
     TRUE
-);
+) ON CONFLICT DO NOTHING;
 
 -- Seed Example Files
 INSERT INTO example_files (id, example_id, file_name, file_path, language, source_code, order_index)
@@ -274,7 +274,7 @@ export default function App() {
   );
 }',
     1
-);
+) ON CONFLICT DO NOTHING;
 
 INSERT INTO example_files (id, example_id, file_name, file_path, language, source_code, order_index)
 VALUES (
@@ -299,5 +299,5 @@ export async function fetchUsers(): Promise<User[]> {
   return [...MOCK_USERS];
 }',
     2
-);
+) ON CONFLICT DO NOTHING;
 

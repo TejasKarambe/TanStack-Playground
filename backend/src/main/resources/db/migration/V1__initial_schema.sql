@@ -1,7 +1,7 @@
 -- V1__initial_schema.sql
 -- TanStack Playground Relational Schema with UUID Primary Keys
 
-CREATE TABLE libraries (
+CREATE TABLE IF NOT EXISTS libraries (
     id UUID PRIMARY KEY,
     slug VARCHAR(60) NOT NULL UNIQUE,
     name VARCHAR(120) NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE libraries (
     updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE topics (
+CREATE TABLE IF NOT EXISTS topics (
     id UUID PRIMARY KEY,
     library_id UUID NOT NULL REFERENCES libraries(id) ON DELETE CASCADE,
     slug VARCHAR(100) NOT NULL UNIQUE,
@@ -29,7 +29,7 @@ CREATE TABLE topics (
     CONSTRAINT uq_library_topic_order UNIQUE (library_id, order_index)
 );
 
-CREATE TABLE topic_contents (
+CREATE TABLE IF NOT EXISTS topic_contents (
     id UUID PRIMARY KEY,
     topic_id UUID NOT NULL UNIQUE REFERENCES topics(id) ON DELETE CASCADE,
     introduction TEXT,
@@ -39,7 +39,7 @@ CREATE TABLE topic_contents (
     example_notes TEXT
 );
 
-CREATE TABLE examples (
+CREATE TABLE IF NOT EXISTS examples (
     id UUID PRIMARY KEY,
     topic_id UUID NOT NULL REFERENCES topics(id) ON DELETE CASCADE,
     title VARCHAR(160) NOT NULL,
@@ -50,7 +50,7 @@ CREATE TABLE examples (
     is_active BOOLEAN NOT NULL DEFAULT TRUE
 );
 
-CREATE TABLE example_files (
+CREATE TABLE IF NOT EXISTS example_files (
     id UUID PRIMARY KEY,
     example_id UUID NOT NULL REFERENCES examples(id) ON DELETE CASCADE,
     file_name VARCHAR(120) NOT NULL,
@@ -61,7 +61,7 @@ CREATE TABLE example_files (
     CONSTRAINT uq_example_file_path UNIQUE (example_id, file_path)
 );
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
@@ -69,7 +69,7 @@ CREATE TABLE users (
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE user_progress (
+CREATE TABLE IF NOT EXISTS user_progress (
     id UUID PRIMARY KEY,
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     topic_id UUID NOT NULL REFERENCES topics(id) ON DELETE CASCADE,
@@ -79,7 +79,7 @@ CREATE TABLE user_progress (
     CONSTRAINT uq_user_topic_progress UNIQUE (user_id, topic_id)
 );
 
-CREATE TABLE bookmarks (
+CREATE TABLE IF NOT EXISTS bookmarks (
     id UUID PRIMARY KEY,
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     topic_id UUID NOT NULL REFERENCES topics(id) ON DELETE CASCADE,
@@ -87,7 +87,7 @@ CREATE TABLE bookmarks (
     CONSTRAINT uq_user_topic_bookmark UNIQUE (user_id, topic_id)
 );
 
-CREATE TABLE user_preferences (
+CREATE TABLE IF NOT EXISTS user_preferences (
     id UUID PRIMARY KEY,
     user_id UUID NOT NULL UNIQUE REFERENCES users(id) ON DELETE CASCADE,
     theme VARCHAR(20) NOT NULL DEFAULT 'dark',
@@ -98,9 +98,9 @@ CREATE TABLE user_preferences (
 );
 
 -- Frequently Queried Indexes
-CREATE INDEX idx_topics_library_order ON topics(library_id, order_index ASC);
-CREATE INDEX idx_examples_topic ON examples(topic_id);
-CREATE INDEX idx_example_files_example ON example_files(example_id, order_index ASC);
-CREATE INDEX idx_progress_user ON user_progress(user_id);
-CREATE INDEX idx_bookmarks_user ON bookmarks(user_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_topics_library_order ON topics(library_id, order_index ASC);
+CREATE INDEX IF NOT EXISTS idx_examples_topic ON examples(topic_id);
+CREATE INDEX IF NOT EXISTS idx_example_files_example ON example_files(example_id, order_index ASC);
+CREATE INDEX IF NOT EXISTS idx_progress_user ON user_progress(user_id);
+CREATE INDEX IF NOT EXISTS idx_bookmarks_user ON bookmarks(user_id, created_at DESC);
 
