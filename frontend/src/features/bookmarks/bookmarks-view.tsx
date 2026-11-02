@@ -1,7 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from '@tanstack/react-router'
 import { Bookmark, Clock, ArrowRight, Trash2 } from 'lucide-react'
-import { BOOKMARKED_LESSONS } from '@/content/libraries-data'
+import { getActiveBookmarks, setBookmarkState, type BookmarkedTopic } from '@/lib/bookmarks'
+import { useAuth } from '@/context/auth-context'
+import { bookmarkApi, type BookmarkResponse } from '@/services/api'
+import { TANSTACK_LIBRARIES } from '@/content/libraries-data'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -9,10 +12,54 @@ import { EmptyState } from '@/components/ui/empty-state'
 import { toast } from 'sonner'
 
 export function BookmarksView() {
-  const [bookmarks, setBookmarks] = useState(BOOKMARKED_LESSONS)
+  const { isAuthenticated } = useAuth()
+  const [bookmarks, setBookmarks] = useState<BookmarkedTopic[]>(getActiveBookmarks)
 
-  const handleRemove = (id: string, title: string) => {
+  // Sync with backend if authenticated
+  useEffect(() => {
+    let isMounted = true
+    if (isAuthenticated) {
+      bookmarkApi
+        .getBookmarks()
+        .then((remoteList: BookmarkResponse[]) => {
+          if (!isMounted || !remoteList) return
+
+          // Build a set of remote bookmarked topic IDs/slugs
+          const remoteTopicIds = new Set(remoteList.map((r: BookmarkResponse) => r.topicId))
+
+          // Match with local catalog
+          const remoteBookmarks: BookmarkedTopic[] = []
+          TANSTACK_LIBRARIES.forEach((lib) => {
+            lib.topics.forEach((topic) => {
+              if (remoteTopicIds.has(topic.id)) {
+                remoteBookmarks.push({
+                  ...topic,
+                  libraryId: lib.id,
+                  libraryName: lib.name,
+                })
+              }
+            })
+          })
+
+          if (remoteBookmarks.length > 0) {
+            setBookmarks(remoteBookmarks)
+          }
+        })
+        .catch(() => {
+          // Keep existing local bookmarks
+        })
+    }
+    return () => {
+      isMounted = false
+    }
+  }, [isAuthenticated])
+
+  const handleRemove = async (id: string, title: string) => {
+    // 1. Optimistically update local view
     setBookmarks((prev) => prev.filter((b) => b.id !== id))
+
+    // 2. Persist deletion to localStorage and backend
+    await setBookmarkState(id, false, isAuthenticated)
     toast.info(`Removed "${title}" from bookmarks.`)
   }
 
@@ -88,4 +135,3 @@ export function BookmarksView() {
     </div>
   )
 }
-

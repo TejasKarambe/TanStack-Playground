@@ -27,14 +27,30 @@ public class BookmarkService {
     private final TopicRepository topicRepository;
     private final EntityDtoMapper mapper;
 
+    public Topic findTopicByIdOrSlug(String identifier) {
+        try {
+            UUID id = UUID.fromString(identifier);
+            return topicRepository.findById(id)
+                    .or(() -> topicRepository.findBySlug(identifier))
+                    .orElseThrow(() -> new ResourceNotFoundException("Topic not found with id or slug: " + identifier));
+        } catch (IllegalArgumentException e) {
+            return topicRepository.findBySlug(identifier)
+                    .orElseThrow(() -> new ResourceNotFoundException("Topic not found with slug: " + identifier));
+        }
+    }
+
     @Transactional
     public BookmarkResponse addBookmark(UUID userId, UUID topicId) {
+        return addBookmark(userId, topicId.toString());
+    }
+
+    @Transactional
+    public BookmarkResponse addBookmark(UUID userId, String topicIdentifier) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
-        Topic topic = topicRepository.findById(topicId)
-                .orElseThrow(() -> new ResourceNotFoundException("Topic not found with id: " + topicId));
+        Topic topic = findTopicByIdOrSlug(topicIdentifier);
 
-        Optional<Bookmark> existing = bookmarkRepository.findByUserIdAndTopicId(userId, topicId);
+        Optional<Bookmark> existing = bookmarkRepository.findByUserIdAndTopicId(userId, topic.getId());
         if (existing.isPresent()) {
             return mapper.toBookmarkResponse(existing.get());
         }
@@ -50,10 +66,15 @@ public class BookmarkService {
 
     @Transactional
     public void removeBookmark(UUID userId, UUID topicId) {
-        if (!bookmarkRepository.existsByUserIdAndTopicId(userId, topicId)) {
-            throw new ResourceNotFoundException("Bookmark not found for user and topic");
+        removeBookmark(userId, topicId.toString());
+    }
+
+    @Transactional
+    public void removeBookmark(UUID userId, String topicIdentifier) {
+        Topic topic = findTopicByIdOrSlug(topicIdentifier);
+        if (bookmarkRepository.existsByUserIdAndTopicId(userId, topic.getId())) {
+            bookmarkRepository.deleteByUserIdAndTopicId(userId, topic.getId());
         }
-        bookmarkRepository.deleteByUserIdAndTopicId(userId, topicId);
     }
 
     @Transactional(readOnly = true)

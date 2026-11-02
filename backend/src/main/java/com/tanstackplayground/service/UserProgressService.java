@@ -28,14 +28,30 @@ public class UserProgressService {
     private final TopicRepository topicRepository;
     private final EntityDtoMapper mapper;
 
+    public Topic findTopicByIdOrSlug(String identifier) {
+        try {
+            UUID id = UUID.fromString(identifier);
+            return topicRepository.findById(id)
+                    .or(() -> topicRepository.findBySlug(identifier))
+                    .orElseThrow(() -> new ResourceNotFoundException("Topic not found with id or slug: " + identifier));
+        } catch (IllegalArgumentException e) {
+            return topicRepository.findBySlug(identifier)
+                    .orElseThrow(() -> new ResourceNotFoundException("Topic not found with slug: " + identifier));
+        }
+    }
+
     @Transactional
     public UserProgressResponse markTopicCompleted(UUID userId, UUID topicId) {
+        return markTopicCompleted(userId, topicId.toString());
+    }
+
+    @Transactional
+    public UserProgressResponse markTopicCompleted(UUID userId, String topicIdentifier) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
-        Topic topic = topicRepository.findById(topicId)
-                .orElseThrow(() -> new ResourceNotFoundException("Topic not found with id: " + topicId));
+        Topic topic = findTopicByIdOrSlug(topicIdentifier);
 
-        UserProgress progress = userProgressRepository.findByUserIdAndTopicId(userId, topicId)
+        UserProgress progress = userProgressRepository.findByUserIdAndTopicId(userId, topic.getId())
                 .orElse(UserProgress.builder()
                         .user(user)
                         .topic(topic)
@@ -52,12 +68,16 @@ public class UserProgressService {
 
     @Transactional
     public UserProgressResponse recordTopicVisit(UUID userId, UUID topicId) {
+        return recordTopicVisit(userId, topicId.toString());
+    }
+
+    @Transactional
+    public UserProgressResponse recordTopicVisit(UUID userId, String topicIdentifier) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
-        Topic topic = topicRepository.findById(topicId)
-                .orElseThrow(() -> new ResourceNotFoundException("Topic not found with id: " + topicId));
+        Topic topic = findTopicByIdOrSlug(topicIdentifier);
 
-        UserProgress progress = userProgressRepository.findByUserIdAndTopicId(userId, topicId)
+        UserProgress progress = userProgressRepository.findByUserIdAndTopicId(userId, topic.getId())
                 .orElse(UserProgress.builder()
                         .user(user)
                         .topic(topic)

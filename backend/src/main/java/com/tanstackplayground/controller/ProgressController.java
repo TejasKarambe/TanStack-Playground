@@ -26,17 +26,17 @@ public class ProgressController {
     private final UserProgressService userProgressService;
 
     @PostMapping("/{topicId}/complete")
-    @Operation(summary = "Mark topic as completed", description = "Marks a learning topic as completed for the authenticated user")
+    @Operation(summary = "Mark topic as completed", description = "Marks a learning topic as completed for the authenticated user by UUID or slug")
     public ResponseEntity<UserProgressResponse> markTopicCompleted(
-            @PathVariable UUID topicId,
+            @PathVariable String topicId,
             @AuthenticationPrincipal UserPrincipal principal) {
         return ResponseEntity.ok(userProgressService.markTopicCompleted(principal.getId(), topicId));
     }
 
     @PostMapping("/{topicId}/visit")
-    @Operation(summary = "Record topic visit", description = "Updates the last visited timestamp for the given topic")
+    @Operation(summary = "Record topic visit", description = "Updates the last visited timestamp for the given topic by UUID or slug")
     public ResponseEntity<UserProgressResponse> recordTopicVisit(
-            @PathVariable UUID topicId,
+            @PathVariable String topicId,
             @AuthenticationPrincipal UserPrincipal principal) {
         return ResponseEntity.ok(userProgressService.recordTopicVisit(principal.getId(), topicId));
     }

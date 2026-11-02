@@ -26,17 +26,17 @@ public class BookmarkController {
     private final BookmarkService bookmarkService;
 
     @PostMapping("/{topicId}")
-    @Operation(summary = "Bookmark a topic", description = "Saves a topic bookmark for the authenticated user")
+    @Operation(summary = "Bookmark a topic", description = "Saves a topic bookmark for the authenticated user by UUID or slug")
     public ResponseEntity<BookmarkResponse> addBookmark(
-            @PathVariable UUID topicId,
+            @PathVariable String topicId,
             @AuthenticationPrincipal UserPrincipal principal) {
         return ResponseEntity.status(HttpStatus.CREATED).body(bookmarkService.addBookmark(principal.getId(), topicId));
     }
 
     @DeleteMapping("/{topicId}")
-    @Operation(summary = "Remove a bookmark", description = "Deletes a topic bookmark for the authenticated user")
+    @Operation(summary = "Remove a bookmark", description = "Deletes a topic bookmark for the authenticated user by UUID or slug")
     public ResponseEntity<Void> removeBookmark(
-            @PathVariable UUID topicId,
+            @PathVariable String topicId,
             @AuthenticationPrincipal UserPrincipal principal) {
         bookmarkService.removeBookmark(principal.getId(), topicId);
         return ResponseEntity.noContent().build();

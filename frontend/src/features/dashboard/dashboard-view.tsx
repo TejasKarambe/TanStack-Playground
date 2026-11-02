@@ -17,16 +17,22 @@ import {
   TOTAL_LIBRARIES,
   TOTAL_LESSONS,
   COMPLETED_LESSONS,
-  BOOKMARKED_LESSONS,
   RECENTLY_VISITED,
   TANSTACK_LIBRARIES,
 } from '@/content/libraries-data'
+import { getActiveBookmarks } from '@/lib/bookmarks'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { LibraryIcon } from '@/components/library-icon'
 
 export function DashboardView() {
+  const [bookmarkedLessons, setBookmarkedLessons] = React.useState(getActiveBookmarks)
+
+  React.useEffect(() => {
+    setBookmarkedLessons(getActiveBookmarks())
+  }, [])
+
   const progressPercentage = Math.round((COMPLETED_LESSONS / TOTAL_LESSONS) * 100)
 
   // Curated recommended next lessons (uncompleted beginner/intermediate lessons)
@@ -135,7 +141,7 @@ export function DashboardView() {
               <span>Active Bookmarks</span>
               <Bookmark className="h-4 w-4 text-primary" />
             </CardDescription>
-            <CardTitle className="text-2xl font-bold">{BOOKMARKED_LESSONS.length}</CardTitle>
+            <CardTitle className="text-2xl font-bold">{bookmarkedLessons.length}</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-xs text-muted-foreground">
@@ -230,7 +236,7 @@ export function DashboardView() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2.5">
-            {BOOKMARKED_LESSONS.slice(0, 4).map((item) => (
+            {bookmarkedLessons.slice(0, 4).map((item) => (
               <div
                 key={item.id}
                 className="flex items-center justify-between p-2.5 rounded-md border border-border/60 bg-muted/20 hover:bg-muted/50 transition-colors"

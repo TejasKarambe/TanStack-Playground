@@ -11,9 +11,10 @@ export interface UserResponse {
 }
 
 export interface AuthResponse {
-  accessToken: string
-  tokenType: string
-  expiresInSeconds: number
+  token?: string
+  accessToken?: string
+  tokenType?: string
+  expiresInSeconds?: number
   user: UserResponse
 }
 
@@ -94,8 +95,12 @@ export const authApi = {
       method: 'POST',
       body: JSON.stringify(creds),
     })
-    if (res.accessToken) {
-      localStorage.setItem('tanstack_auth_token', res.accessToken)
+    const token = res.token || res.accessToken
+    if (token) {
+      localStorage.setItem('tanstack_auth_token', token)
+    }
+    if (res.user) {
+      localStorage.setItem('tanstack_user_profile', JSON.stringify(res.user))
     }
     return res
   },
@@ -105,8 +110,12 @@ export const authApi = {
       method: 'POST',
       body: JSON.stringify(data),
     })
-    if (res.accessToken) {
-      localStorage.setItem('tanstack_auth_token', res.accessToken)
+    const token = res.token || res.accessToken
+    if (token) {
+      localStorage.setItem('tanstack_auth_token', token)
+    }
+    if (res.user) {
+      localStorage.setItem('tanstack_user_profile', JSON.stringify(res.user))
     }
     return res
   },
@@ -116,6 +125,7 @@ export const authApi = {
       await request<void>('/auth/logout', { method: 'POST' })
     } finally {
       localStorage.removeItem('tanstack_auth_token')
+      localStorage.removeItem('tanstack_user_profile')
     }
   },
 

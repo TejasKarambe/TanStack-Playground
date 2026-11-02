@@ -18,22 +18,41 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<UserResponse | null>(null)
+  const [user, setUser] = useState<UserResponse | null>(() => {
+    try {
+      const saved = localStorage.getItem('tanstack_user_profile')
+      const token = localStorage.getItem('tanstack_auth_token')
+      if (saved && token) {
+        return JSON.parse(saved)
+      }
+    } catch {}
+    return null
+  })
   const [isLoading, setIsLoading] = useState(true)
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
 
-  // Verify session on mount
+  // Verify session on mount with resilient error handling
   useEffect(() => {
     const initAuth = async () => {
+      const token = localStorage.getItem('tanstack_auth_token')
+      if (!token) {
+        setUser(null)
+        setIsLoading(false)
+        return
+      }
+
       try {
-        const token = localStorage.getItem('tanstack_auth_token')
-        if (token) {
-          const profile = await authApi.getMe()
-          setUser(profile)
+        const profile = await authApi.getMe()
+        setUser(profile)
+        localStorage.setItem('tanstack_user_profile', JSON.stringify(profile))
+      } catch (err: any) {
+        // Only invalidate if the token is explicitly rejected (HTTP 401 or 403)
+        // Do NOT log out on network latency, offline mode, or Render cold start wakeups!
+        if (err?.message?.includes('401') || err?.message?.includes('403')) {
+          setUser(null)
+          localStorage.removeItem('tanstack_auth_token')
+          localStorage.removeItem('tanstack_user_profile')
         }
-      } catch {
-        // Anonymous visitor session or expired token
-        localStorage.removeItem('tanstack_auth_token')
       } finally {
         setIsLoading(false)
       }
@@ -106,6 +125,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setUser(null)
       localStorage.removeItem('tanstack_auth_token')
+      localStorage.removeItem('tanstack_user_profile')
       toast.info('Signed out. Continuing in anonymous guest mode.')
     }
   }
