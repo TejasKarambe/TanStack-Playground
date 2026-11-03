@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Outlet } from '@tanstack/react-router'
 import { Sidebar } from './sidebar'
 import { Navbar } from './navbar'

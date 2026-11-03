@@ -1,4 +1,3 @@
-import React from 'react'
 import { LessonWorkspace } from '@/components/playground/lesson-workspace'
 import type { LessonExample } from '@/content/types'
 import { Sparkles, Share2 } from 'lucide-react'

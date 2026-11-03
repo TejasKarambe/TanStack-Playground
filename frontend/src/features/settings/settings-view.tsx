@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { SlidersHorizontal, Moon, Sun, Laptop, Save, RotateCcw } from 'lucide-react'
 import { useTheme } from '@/components/theme-provider'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'

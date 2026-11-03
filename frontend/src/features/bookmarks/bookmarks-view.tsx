@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from '@tanstack/react-router'
 import { Bookmark, Clock, ArrowRight, Trash2 } from 'lucide-react'
 import { getActiveBookmarks, setBookmarkState, type BookmarkedTopic } from '@/lib/bookmarks'

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import { useRef, useState } from 'react'
 import Editor, { type OnMount } from '@monaco-editor/react'
 import {
   Copy,
@@ -75,9 +75,9 @@ export function MonacoCodeEditor({
   const onSaveRef = useRef(onSave)
   onSaveRef.current = onSave
 
-  const [copied, setCopied] = React.useState(false)
-  const [fontSize, setFontSize] = React.useState(13)
-  const [wordWrap, setWordWrap] = React.useState(true)
+  const [copied, setCopied] = useState(false)
+  const [fontSize, setFontSize] = useState(13)
+  const [wordWrap, setWordWrap] = useState(true)
 
   const handleSave = () => {
     const currentCode = editorRef.current ? editorRef.current.getValue() : code

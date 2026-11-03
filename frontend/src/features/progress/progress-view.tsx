@@ -1,4 +1,3 @@
-import React from 'react'
 import { Link } from '@tanstack/react-router'
 import { ArrowRight, Layers } from 'lucide-react'
 import {

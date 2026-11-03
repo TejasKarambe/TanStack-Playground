@@ -1,11 +1,9 @@
-import React from 'react'
 import { Link, useParams } from '@tanstack/react-router'
 import {
   ExternalLink,
   BookOpen,
   Clock,
   CheckCircle2,
-  Bookmark,
   ArrowRight,
   ArrowLeft,
 } from 'lucide-react'

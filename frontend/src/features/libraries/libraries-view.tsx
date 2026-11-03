@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { ExternalLink, ArrowRight } from 'lucide-react'
 import { TANSTACK_LIBRARIES } from '@/content/libraries-data'

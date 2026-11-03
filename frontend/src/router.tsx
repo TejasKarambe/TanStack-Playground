@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   createRouter,
   createRoute,
@@ -6,6 +5,7 @@ import {
   Navigate,
 } from '@tanstack/react-router'
 import { z } from 'zod'
+import { AlertCircle, Compass } from 'lucide-react'
 import { MainLayout } from '@/components/layout/main-layout'
 import { DashboardView } from '@/features/dashboard/dashboard-view'
 import { LibrariesView } from '@/features/libraries/libraries-view'
@@ -15,6 +15,8 @@ import { PlaygroundView } from '@/features/playground/playground-view'
 import { ProgressView } from '@/features/progress/progress-view'
 import { BookmarksView } from '@/features/bookmarks/bookmarks-view'
 import { SettingsView } from '@/features/settings/settings-view'
+import { EmptyState } from '@/components/ui/empty-state'
+import { Button } from '@/components/ui/button'
 
 // Root route hosting the global shell (Sidebar, Navbar, Theme, Toasts, Outlet)
 const rootRoute = createRootRoute({
@@ -91,11 +93,8 @@ const settingsRoute = createRoute({
   component: SettingsView,
 })
 
-import { EmptyState } from '@/components/ui/empty-state'
-import { Button } from '@/components/ui/button'
-import { AlertCircle, Compass } from 'lucide-react'
-
-function RouterErrorComponent({ error, reset }: { error: any; reset: () => void }) {
+function RouterErrorComponent({ error, reset }: { error: unknown; reset: () => void }) {
+  const errorMessage = error instanceof Error ? error.message : typeof error === 'object' && error !== null && 'message' in error ? String((error as { message: unknown }).message) : 'Failed to render requested view'
   return (
     <div className="flex-1 flex items-center justify-center p-8">
       <div className="max-w-md w-full rounded-xl border border-destructive/20 bg-destructive/5 p-6 text-center space-y-4">
@@ -104,7 +103,7 @@ function RouterErrorComponent({ error, reset }: { error: any; reset: () => void 
         </div>
         <div className="space-y-1">
           <h3 className="text-lg font-semibold text-foreground">Navigation Error</h3>
-          <p className="text-xs text-muted-foreground">{error?.message || 'Failed to render requested view'}</p>
+          <p className="text-xs text-muted-foreground">{errorMessage}</p>
         </div>
         <div className="flex justify-center gap-2">
           <Button size="sm" onClick={reset}>Try Again</Button>
