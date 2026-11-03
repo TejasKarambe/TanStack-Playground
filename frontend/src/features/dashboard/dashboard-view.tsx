@@ -208,7 +208,7 @@ export function DashboardView() {
                 <Button asChild size="sm" variant="ghost" className="h-8 gap-1 text-xs shrink-0">
                   <Link
                     to="/library/$libraryId/$topicId"
-                    params={{ libraryId: item.libraryId, topicId: item.id }}
+                    params={{ libraryId: item.libraryId, topicId: item.id } as any}
                   >
                     <span>Open</span>
                     <ArrowRight className="h-3 w-3" />
@@ -258,7 +258,7 @@ export function DashboardView() {
                 <Button asChild size="sm" variant="ghost" className="h-8 gap-1 text-xs shrink-0">
                   <Link
                     to="/library/$libraryId/$topicId"
-                    params={{ libraryId: item.libraryId, topicId: item.id }}
+                    params={{ libraryId: item.libraryId, topicId: item.id } as any}
                   >
                     <span>Review</span>
                     <ArrowRight className="h-3 w-3" />
@@ -316,7 +316,7 @@ export function DashboardView() {
                 <Button asChild size="sm" className="h-7 text-xs">
                   <Link
                     to="/library/$libraryId/$topicId"
-                    params={{ libraryId: item.libraryId, topicId: item.id }}
+                    params={{ libraryId: item.libraryId, topicId: item.id } as any}
                   >
                     Start
                   </Link>

@@ -89,7 +89,7 @@ export function ProgressView() {
                   <div className="flex items-center gap-3">
                     <span className="font-mono text-xs font-semibold text-muted-foreground">{pct}%</span>
                     <Button asChild size="sm" variant="ghost" className="h-7 text-xs gap-1">
-                      <Link to="/library/$libraryId" params={{ libraryId: lib.id }}>
+                      <Link to="/library/$libraryId" params={{ libraryId: lib.id } as any}>
                         <span>Open</span>
                         <ArrowRight className="h-3 w-3" />
                       </Link>

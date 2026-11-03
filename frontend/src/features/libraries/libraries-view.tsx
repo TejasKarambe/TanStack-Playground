@@ -127,7 +127,7 @@ export function LibrariesView() {
                 </a>
               </Button>
               <Button asChild size="sm" className="h-8 text-xs gap-1.5 flex-1">
-                <Link to="/library/$libraryId" params={{ libraryId: lib.id }}>
+                <Link to="/library/$libraryId" params={{ libraryId: lib.id } as any}>
                   <span>View Track</span>
                   <ArrowRight className="h-3 w-3" />
                 </Link>

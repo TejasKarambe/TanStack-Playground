@@ -145,7 +145,7 @@ export function LibraryDetailView() {
                   <Button asChild size="sm" className="h-8 gap-1.5 text-xs">
                     <Link
                       to="/library/$libraryId/$topicId"
-                      params={{ libraryId: library.id, topicId: topic.id }}
+                      params={{ libraryId: library.id, topicId: topic.id } as any}
                     >
                       <span>{topic.isCompleted ? 'Review' : 'Start'}</span>
                       <ArrowRight className="h-3 w-3" />

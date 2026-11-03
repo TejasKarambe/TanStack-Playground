@@ -121,7 +121,7 @@ export function BookmarksView() {
                 <Button asChild size="sm" className="h-8 gap-1.5 text-xs">
                   <Link
                     to="/library/$libraryId/$topicId"
-                    params={{ libraryId: item.libraryId, topicId: item.id }}
+                    params={{ libraryId: item.libraryId, topicId: item.id } as any}
                   >
                     <span>Open Lesson</span>
                     <ArrowRight className="h-3 w-3" />

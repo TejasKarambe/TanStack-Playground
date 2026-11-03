@@ -180,7 +180,7 @@ export function Sidebar({
                     <TooltipTrigger asChild>
                       <Link
                         to="/library/$libraryId"
-                        params={{ libraryId: lib.id }}
+                        params={{ libraryId: lib.id } as any}
                         onClick={onItemClick}
                         className={cn(
                           'flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer group',

@@ -268,7 +268,7 @@ export function TopicDetailView() {
       <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-card/70 backdrop-blur-xs text-xs shrink-0">
         <div className="flex items-center gap-2 min-w-0">
           <Button asChild variant="ghost" size="sm" className="h-7 text-xs gap-1 -ml-1 text-muted-foreground hover:text-foreground">
-            <Link to="/library/$libraryId" params={{ libraryId: library.id }}>
+            <Link to="/library/$libraryId" params={{ libraryId: library.id } as any}>
               <ArrowLeft className="h-3.5 w-3.5" />
               <span>{library.shortName}</span>
             </Link>
