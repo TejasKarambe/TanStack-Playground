@@ -11,3 +11,4 @@ declare module '@tanstack/router-core' {
     router: typeof router
   }
 }
+

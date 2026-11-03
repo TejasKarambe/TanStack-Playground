@@ -7,6 +7,10 @@
     "types": ["vite/client", "node"],
     "skipLibCheck": true,
 
+    /* Strict Type-Checking */
+    "strict": true,
+    "strictNullChecks": true,
+
     /* Bundler mode */
     "moduleResolution": "bundler",
     "noEmit": true,
